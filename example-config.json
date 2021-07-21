@@ -1,0 +1,55 @@
+        {
+            "devices": [
+                {
+                    "name": "WiFi",
+                    "host": "https://n123456.meraki.com",
+                    "apiKey": "your-key-here",
+                    "organizationId": "org-id",
+                    "networkId": "network-locale",
+                    "type": "wlanControl",
+                    "refreshInterval": 60
+                },
+                {
+                    "name": "Temperature",
+                    "host": "https://n123456.meraki.com",
+                    "apiKey": "your-key-here",
+                    "organizationId": "org-id",
+                    "networkId": "network-locale",
+                    "type": "tempSensor",
+                    "serial": "serial-1",
+                    "refreshInterval": 60
+                },
+                {
+                    "name": "Humidity",
+                    "host": "https://n123456.meraki.com",
+                    "apiKey": "your-key-here",
+                    "organizationId": "org-id",
+                    "networkId": "network-locale",
+                    "type": "humiditySensor",
+                    "serial": "serial-1",
+                    "refreshInterval": 60
+                },
+                {
+                    "name": "Balcony Door",
+                    "host": "https://n123456.meraki.com",
+                    "apiKey": "your-key-here",
+                    "organizationId": "org-id",
+                    "networkId": "network-locale",
+                    "type": "doorSensor",
+                    "serial": "serial-2",
+                    "refreshInterval": 5
+                },
+                {
+                    "name": "Flood Sensor",
+                    "host": "https://n123456.meraki.com",
+                    "apiKey": "your-key-here",
+                    "organizationId": "org-id",
+                    "networkId": "network-locale",
+                    "type": "waterSensor",
+                    "serial": "serial-3",
+                    "refreshInterval": 30
+                }
+            ],
+            "platform": "Meraki"
+        }
+
