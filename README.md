@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://gitlab.com/alexhoulton/homebridge-meraki-mt-sensor"><img src="https://raw.githubusercontent.com/grzegorz914/homebridge-meraki-mt-sensor/master/graphics/meraki.png" height="140"></a>
+  <a href="https://gitlab.com/alexhoulton/homebridge-meraki-mt-sensor"><img src="https://gitlab.com/alexhoulton/homebridge-meraki-mt-sensor/-/raw/main/graphics/meraki.png" height="140"></a>
 </p>
 
 <span align="center">
@@ -23,7 +23,7 @@ This plugin enables you to monitor Meraki MT sensor data in Homebridge, and thus
 Use [Homebridge Config UI X](https://github.com/oznu/homebridge-config-ui-x) to configure the plugin (strongly recomended), or update your configuration file manually. See `sample-config.json` in this repository for a sample or add the bottom example to Your config.json file.
 
 ## Whats new:
-https://github.com/grzegorz914/homebridge-meraki-mt-sensor/blob/master/CHANGELOG.md
+https://gitlab.com/alexhoulton/homebridge-meraki-mt-sensor/-/raw/main/CHANGELOG.md
 
 ## Development
 - Pull request and help in development highly appreciated.
