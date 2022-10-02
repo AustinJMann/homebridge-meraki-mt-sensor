@@ -1,20 +1,20 @@
 {
-    "name": "homebridge-meraki-control",
-    "version": "0.4.29",
-    "description": "Homebridge plugin (https://github.com/homebridge/homebridge) to control Meraki devices.",
+    "name": "homebridge-meraki-mt-sensor",
+    "version": "1.0.0",
+    "description": "Homebridge plugin (https://github.com/homebridge/homebridge) for Meraki MT Sensors",
     "license": "MIT",
-    "author": "grzegorz914",
-    "homepage": "https://github.com/grzegorz914/homebridge-meraki-control#readme",
+    "author": "alexhoulton",
+    "homepage": "https://gitlab.com/alexhoulton/homebridge-meraki-mt-sensor",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/grzegorz914/homebridge-meraki-control.git"
+        "url": "git+https://gitlab.com/alexhoulton/homebridge-meraki-mt-sensor.git"
     },
     "bugs": {
-        "url": "https://github.com/grzegorz914/homebridge-meraki-control/issues"
+        "url": "https://gitlab.com/alexhoulton/homebridge-meraki-mt-sensor/-/issues"
     },
     "funding": {
         "type": "paypal",
-        "url": "https://paypal.me/GrzegorzKaczor"
+        "url": "https://paypal.me/alexhoulton56"
     },
     "main": "index.js",
     "files": [
@@ -35,7 +35,9 @@
     "keywords": [
         "homebridge",
         "homebridge-plugin",
-        "homebridge-meraki-control",
+        "homebridge-meraki-mt-sensor",
+        "meraki mt",
+        "meraki sensor",
         "meraki",
         "cisco"
     ],

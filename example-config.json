@@ -1,15 +1,6 @@
         {
             "devices": [
                 {
-                    "name": "WiFi",
-                    "host": "https://n123456.meraki.com",
-                    "apiKey": "your-key-here",
-                    "organizationId": "org-id",
-                    "networkId": "network-locale",
-                    "type": "wlanControl",
-                    "refreshInterval": 60
-                },
-                {
                     "name": "Temperature",
                     "host": "https://n123456.meraki.com",
                     "apiKey": "your-key-here",

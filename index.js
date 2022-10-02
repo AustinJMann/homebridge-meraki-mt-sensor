@@ -4,8 +4,8 @@ const axios = require('axios').default;
 const fs = require('fs');
 const path = require('path');
 
-const PLUGIN_NAME = 'homebridge-meraki-control';
-const PLATFORM_NAME = 'Meraki';
+const PLUGIN_NAME = 'homebridge-meraki-mt-sensor';
+const PLATFORM_NAME = 'MerakiMT';
 
 let Accessory, Characteristic, Service, Categories, UUID;
 
@@ -15,10 +15,10 @@ module.exports = (api) => {
   Service = api.hap.Service;
   Categories = api.hap.Categories;
   UUID = api.hap.uuid;
-  api.registerPlatform(PLUGIN_NAME, PLATFORM_NAME, merakiPlatform, true);
+  api.registerPlatform(PLUGIN_NAME, PLATFORM_NAME, merakiMTPlatform, true);
 }
 
-class merakiPlatform {
+class merakiMTPlatform {
   constructor(log, config, api) {
     // only load if configured
     if (!config || !Array.isArray(config.devices)) {
@@ -37,7 +37,7 @@ class merakiPlatform {
         if (!device.name) {
           this.log.warn('Device Name Missing');
         } else {
-          new merakiDevice(this.log, device, this.api);
+          new merakiMTDevice(this.log, device, this.api);
         }
       }
     });
@@ -54,7 +54,7 @@ class merakiPlatform {
   }
 }
 
-class merakiDevice {
+class merakiMTDevice {
   constructor(log, config, api) {
     this.log = log;
     this.api = api;
@@ -67,7 +67,7 @@ class merakiDevice {
     this.apiKey = config.apiKey;
     this.organizationId = config.organizationId;
     this.networkId = config.networkId;
-    this.type = config.type || "wlanControl";
+    this.type = config.type;
     this.refreshInterval = config.refreshInterval || 10;
 
     //get Device info
@@ -78,14 +78,8 @@ class merakiDevice {
 
     //setup variables
     this.checkDeviceState = false;
-    this.wlanLength = 0;
-    this.wlanState = [];
     this.prefDir = path.join(api.user.storagePath(), 'meraki');
     this.productTypeUrl = this.host + '/api/v1/networks/' + this.networkId;
-    this.mxUrl = this.host + '/api/v1/networks/' + this.networkId + '/appliance/ports';
-    this.mrUrl = this.host + '/api/v1/networks/' + this.networkId + '/wireless/ssids';
-    this.msUrl = this.host + '/api/v1/devices/' + this.serialNumber + '/switch/ports';
-    this.mvUrl = this.host + '/api/v1/devices/' + this.serialNumber + '/camera';
     this.mtUrl = this.host + '/api/v1/devices/' + this.networkId + '/sensors';
     this.mtStatsUrl = this.host + '/api/v1/networks/' + this.networkId + '/sensors/stats/latestBySensor';
     this.devicesUrl = this.host + '/api/v1/networks/' + this.networkId + '/devices';
@@ -198,24 +192,11 @@ class merakiDevice {
                 .on('set', this.getWaterState.bind(this));
       }
 
-      if (this.type == "wlanControl") {
-        const response = await this.meraki.get(this.mrUrl);
-        let result = response.data;
-        this.log.debug('Device %s, get device status data: %s', this.name, result);
-
-        this.wlan0Name = result[0].name;
-        this.merakiService1 = new Service.Switch(this.wlan0Name, 'merakiService1');
-
-        this.merakiService1.getCharacteristic(Characteristic.On)
-          .on('get', this.getWlan0State.bind(this))
-          .on('set', this.setWlan0State.bind(this));
-      }
-
       this.accessory.addService(this.merakiService1);
       this.checkDeviceState = true;
 
     } catch (error) {
-      this.log.debug('Device: %s, state Offline, read SSIDs error: %s', this.name, error);
+      this.log.debug('Device: %s, state Offline, read Device error: %s', this.name, error);
     };
   }
 
@@ -249,7 +230,7 @@ class merakiDevice {
       }
 
       if (this.type == "humiditySensor") {
-	if (me.merakiService1) {
+	      if (me.merakiService1) {
           const humresponse = await me.meraki.get(me.mtStatsUrl + '?metric=humidity', { data: { serials: [me.serialNumber]} });
           me.log.info('got response %s', humresponse.data[0]);
           let humvalue = (humresponse.data[0].value);
@@ -280,46 +261,16 @@ class merakiDevice {
 
       if (me.serialNumber != "-" && me.modelName == "-") {
         // go get model numbers for devices we have serials for
-	const response = await me.meraki.get(me.devicesUrl);
+      	const response = await me.meraki.get(me.devicesUrl);
         var picked = response.data.find(o => o.serial === me.serialNumber);
         me.informationService.setCharacteristic(Characteristic.Model, picked['model'])
-	me.modelName = picked['model'];
-	me.log.info('%s: updated model to: %s', me.serialNumber, me.modelName);
-
+        me.modelName = picked['model'];
+        me.log.info('%s: updated model to: %s', me.serialNumber, me.modelName);
       }
 
-      if (this.type == "wlanControl") {
-        const response = await me.meraki.get(me.mrUrl);
-        me.log.debug('Device %s, get device status data: %s', me.name, response.data);
-  
-        let wlanLength = response.data.length;
-        me.log.debug('Device: %s, number of available SSIDs: %s', me.name, wlanLength);
-        me.wlanLength = wlanLength;
-  
-        if (me.wlanControl >= 1 && me.merakiService1) {
-          let wlan0Name = response.data[0].name;
-          let wlan0State = (response.data[0].enabled == true);
-          me.merakiService1.updateCharacteristic(Characteristic.On, wlan0State);
-          me.log.debug('UpdateDeviceState() - Device: %s, SSIDs: %s state: %s', me.name, wlan0Name, wlan0State ? 'ON' : 'OFF');
-          me.wlan0Name = wlan0Name;
-          me.wlan0State = wlan0State;
-        }
-      }
     } catch (error) {
       me.log.error('UpdateDeviceState() - Device: %s, update status error: %s, state: Offline', me.name, error);
     }
-  }
-
-  async getWlan0State(callback) {
-    var me = this;
-    try {
-      const response = await me.meraki.get(me.mrUrl);
-      let state = (response.data[0].enabled == true);
-      me.log.info('getWlan0State() - Device: %s, SSIDs: %s state: %s', me.name, me.wlan0Name, state ? 'ON' : 'OFF');
-      callback(null, state);
-    } catch (error) {
-      me.log.debug('Device: %s, SSIDs: %s get state error: %s', me.name, me.wlan0Name, error);
-    };
   }
 
   async getTemperature(callback) {
@@ -330,7 +281,7 @@ class merakiDevice {
       me.log.info('getTemperature() - Network: %s, Sensor: %s Value: %s', me.name, me.name, value);
       callback(null, value);
     } catch (error) {
-      me.log.debug('Device: %s, SSIDs: %s get state error: %s', me.name, me.serial, error);
+      me.log.debug('Device: %s, Serial: %s get state error: %s', me.name, me.serial, error);
     };
   }
 
@@ -342,7 +293,7 @@ class merakiDevice {
       me.log.info('getHumidity() - Network: %s, Sensor: %s Value: %s', me.name, me.name, value);
       callback(null, value);
     } catch (error) {
-      me.log.debug('Device: %s, SSIDs: %s get state error: %s', me.name, me.serial, error);
+      me.log.debug('Device: %s, Serial: %s get state error: %s', me.name, me.serial, error);
     };
   }
 
@@ -354,7 +305,7 @@ class merakiDevice {
       me.log.info('getContactState() - Network: %s, Sensor: %s Value: %s', me.name, me.name, value);
       callback(null, value);
     } catch (error) {
-      me.log.debug('Device: %s, SSIDs: %s get state error: %s', me.name, me.serial, error);
+      me.log.debug('Device: %s, Serial: %s get state error: %s', me.name, me.serial, error);
     };
   }
 
@@ -366,20 +317,7 @@ class merakiDevice {
       me.log.info('getContactState() - Network: %s, Sensor: %s Value: %s', me.name, me.name, value);
       callback(null, value);
     } catch (error) {
-      me.log.debug('Device: %s, SSIDs: %s get state error: %s', me.name, me.serial, error);
-    };
-  }
-
-  async setWlan0State(state, callback) {
-    var me = this;
-    let newState = state ? true : false;
-    let data = { 'enabled': newState };
-    try {
-      const response = await me.meraki.put(me.mrUrl + '/0', data);
-      me.log.info('Device: %s, SSIDs: %s state: %s', me.name, me.wlan0Name, state ? 'ON' : 'OFF');
-      callback(null, state);
-    } catch (error) {
-      me.log('Device: %s, SSIDs: %s set new state error: %s', me.name, me.wlan0Name, error);
+      me.log.debug('Device: %s, Serial: %s get state error: %s', me.name, me.serial, error);
     };
   }
 
