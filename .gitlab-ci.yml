@@ -1,0 +1,33 @@
+image: node:latest
+
+cache:
+    paths:
+        - node_modules/
+
+build:
+    stage: build
+    script:
+        - npm --color="always" install
+        - npx tsc
+    artifacts:
+        paths:
+            - dist
+
+publish-npm:
+    stage: deploy
+    script:
+        - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+        - npm --color="always" publish
+    dependencies:
+        - build
+    only:
+        refs:
+            - main
+        variables:
+            - $NPM_TOKEN
+    except:
+        - branches
+    cache:
+        paths:
+            - node_modules/
+        policy: pull
