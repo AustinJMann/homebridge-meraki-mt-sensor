@@ -8,9 +8,6 @@ build:
     stage: build
     script:
         - npm --color="always" install
-    artifacts:
-        paths:
-            - dist
 
 publish-npm:
     stage: deploy
