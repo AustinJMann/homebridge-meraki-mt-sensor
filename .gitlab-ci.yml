@@ -21,8 +21,6 @@ publish-npm:
             - main
         variables:
             - $NPM_TOKEN
-    except:
-        - branches
     cache:
         paths:
             - node_modules/
