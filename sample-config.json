@@ -1,37 +1,66 @@
 {
     "bridge": {
-        "name": "Homebridge",
-        "username": "AA:BB:CC:DD:EE:FF",
-        "manufacturer": "homebridge.io",
-        "model": "homebridge",
-        "port": 9100,
-        "pin": "123-45-678"
-    },
-    "description": "HomeKit Bridge",
-    "ports": {
-        "start": 9101,
-        "end": 9150,
-        "comment": "In this section set the port for Homebridge accessories."
+        "name": "Homebridge 71F5",
+        "username": "0E:AF:D6:B0:71:F5",
+        "port": 51874,
+        "pin": "675-98-681",
+        "advertiser": "bonjour-hap"
     },
     "accessories": [],
     "platforms": [
         {
-            "platform": "Meraki",
+            "name": "Config",
+            "port": 8581,
+            "platform": "config"
+        },
+        {
             "devices": [
                 {
-                    "name": "Meraki MR52",
+                    "name": "Temperature",
                     "host": "https://n123.meraki.com",
-                    "apiKey": "01032453453421923",
-                    "organizationId": "L_0123456789",
-                    "networkId": "1234567",
-                    "wlanControl": 0,
-                    "refreshInterval": 10,
-                    "manufacturer": "Manufacturer",
-                    "modelName": "Model",
-                    "serialNumber": "Serial Number",
-                    "firmwareRevision": "Firmware Revision"
+                    "apiKey": "abcdefghij1234566",
+                    "organizationId": "123456",
+                    "networkId": "L_1234567890",
+                    "serial": "ABCD-1234-ABCD",
+                    "type": "tempSensor",
+                    "refreshInterval": 10
+                },
+                {
+                    "name": "Humidity",
+                    "host": "https://n123456.meraki.com",
+                    "apiKey": "abcdefghij1234566",
+                    "organizationId": "123456",
+                    "networkId": "L_1234567890",
+                    "serial": "ABCD-1234-ABCD",
+                    "type": "humiditySensor",
+                    "refreshInterval": 60
+                },
+                {
+                    "name": "Balcony Door",
+                    "host": "https://n123456.meraki.com",
+                    "apiKey": "abcdefghij1234566",
+                    "organizationId": "123456",
+                    "networkId": "L_1234567890",
+                    "serial": "ABCD-1234-ABCD",
+                    "type": "doorSensor",
+                    "refreshInterval": 5
+                },
+                {
+                    "name": "Flood Sensor",
+                    "host": "https://n123456.meraki.com",
+                    "apiKey": "abcdefghij1234566",
+                    "organizationId": "123456",
+                    "networkId": "L_1234567890",
+                    "serial": "ABCD-1234-ABCD",
+                    "type": "waterSensor",
+                    "refreshInterval": 30
                 }
-            ]
+            ],
+            "platform": "MerakiMT",
+            "_bridge": {
+                "username": "0E:C4:95:EB:6B:D3",
+                "port": 34668
+            }
         }
     ]
 }
