@@ -8,7 +8,6 @@ build:
     stage: build
     script:
         - npm --color="always" install
-        - npx tsc
     artifacts:
         paths:
             - dist
