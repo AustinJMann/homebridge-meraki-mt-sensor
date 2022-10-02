@@ -1,6 +1,6 @@
 {
     "name": "homebridge-meraki-mt-sensor",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Homebridge plugin (https://github.com/homebridge/homebridge) for Meraki MT Sensors",
     "license": "MIT",
     "author": "alexhoulton",
