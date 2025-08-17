@@ -272,7 +272,7 @@ class merakiMTDevice {
                 } else {
                     value = 1;
                 }
-                me.merakiService1.updateCharacteristic(Characteristic.CarbonDioxide, value);
+                me.merakiService1.updateCharacteristic(Characteristic.CarbonDioxideDetected, value);
             }
         }
 
