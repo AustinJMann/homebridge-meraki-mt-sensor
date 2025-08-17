@@ -1,20 +1,16 @@
 {
-    "name": "homebridge-meraki-mt-sensor",
-    "version": "1.0.3",
+    "name": "homebridge-meraki-mt-sensor-extended",
+    "version": "1.0.4",
     "description": "Homebridge plugin (https://github.com/homebridge/homebridge) for Meraki MT Sensors",
     "license": "MIT",
-    "author": "alexhoulton",
-    "homepage": "https://gitlab.com/alexhoulton/homebridge-meraki-mt-sensor",
+    "author": "austinjmann",
+    "homepage": "https://github.com/austinjmann/homebridge-meraki-mt-sensor",
     "repository": {
         "type": "git",
-        "url": "git+https://gitlab.com/alexhoulton/homebridge-meraki-mt-sensor.git"
+        "url": "git+https://github.com/austinjmann/homebridge-meraki-mt-sensor.git"
     },
     "bugs": {
-        "url": "https://gitlab.com/alexhoulton/homebridge-meraki-mt-sensor/-/issues"
-    },
-    "funding": {
-        "type": "paypal",
-        "url": "https://paypal.me/alexhoulton56"
+        "url": "https://github.com/austinjmann/homebridge-meraki-mt-sensor/-/issues"
     },
     "main": "index.js",
     "files": [
