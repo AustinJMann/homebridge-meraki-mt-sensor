@@ -197,7 +197,7 @@ class merakiMTDevice {
             this.merakiService1.getCharacteristic(Characteristic.CarbonDioxideDetected)
                 .on('get', this.getCo2Safe.bind(this))
                 .on('set', this.getCo2Safe.bind(this));
-            this.merakiService1.getCharacteristic(Characteristic.Characteristic.CarbonDioxideLevel)
+            this.merakiService1.getCharacteristic(Characteristic.CarbonDioxideLevel)
                 .on('get', this.getCo2.bind(this))
                 .on('set', this.getCo2.bind(this));
         }
@@ -232,6 +232,7 @@ class merakiMTDevice {
       me.log('Model: %s', me.modelName);
       me.log('Serialnr: %s', me.serialNumber);
       me.log('Firmware: %s', me.firmwareRevision);
+      me.log('Type: %s', me.type);
       me.log('----------------------------------');
       me.updateDeviceState();
     } catch (error) {
