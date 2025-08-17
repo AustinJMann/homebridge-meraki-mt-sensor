@@ -246,19 +246,19 @@ class merakiMTDevice {
       if (this.type == "tempSensor") {
         if (me.merakiService1) {
           const response = await me.meraki.get(me.mtStatsUrl + '?metrics[]=temperature', { data: { serials: [me.serialNumber]} });
-          let value = (response.data[0]['readings'][0]['temperature']['fahrenheit']);
+          let value = (response.data[0]['readings'][0]['temperature']['celsius']);
           me.log.info('Network: %s, Sensor: %s Value: %s', me.name, me.name, value);
           me.merakiService1.updateCharacteristic(Characteristic.CurrentTemperature, value);
         }
       }
 
       if (this.type == "humiditySensor") {
-	      if (me.merakiService1) {
-          const humresponse = await me.meraki.get(me.mtStatsUrl + '?metrics[]=humidity', { data: { serials: [me.serialNumber]} });
-          let humvalue = (humresponse.data[0]['readings'][0]['humidity']['relativePercentage']);
-          me.log.info('Network: %s, Sensor: %s Value: %s', me.name, me.name, humvalue);
-          me.merakiService1.updateCharacteristic(Characteristic.CurrentRelativeHumidity, humvalue);
-        }
+          if (me.merakiService1) {
+            const humresponse = await me.meraki.get(me.mtStatsUrl + '?metrics[]=humidity', { data: { serials: [me.serialNumber]} });
+            let humvalue = (humresponse.data[0]['readings'][0]['humidity']['relativePercentage']);
+            me.log.info('Network: %s, Sensor: %s Value: %s', me.name, me.name, humvalue);
+            me.merakiService1.updateCharacteristic(Characteristic.CurrentRelativeHumidity, humvalue);
+          }
       }
 
         if (this.type == "co2Sensor") {
@@ -332,7 +332,7 @@ class merakiMTDevice {
     var me = this;
     try {
       const response = await me.meraki.get(me.mtStatsUrl + '?metrics[]=temperature', { data: { serials: [me.serialNumber]} });
-      let value = (response.data[0]['readings'][0]['temperature']['fahrenheit']);
+      let value = (response.data[0]['readings'][0]['temperature']['celsius']);
       me.log.info('getTemperature() - Network: %s, Sensor: %s Value: %s', me.name, me.name, value);
       callback(null, value);
     } catch (error) {
