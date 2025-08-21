@@ -300,7 +300,17 @@ class merakiMTDevice {
             if (me.merakiService1) {
                 const response = await me.meraki.get(me.mtStatsUrl + '?metrics[]=indoorAirQuality', { data: { serials: [me.serialNumber]} });
                 let value = (response.data[0]['readings'][0]['indoorAirQuality']['score']);
-                value = Math.max(1, Math.min(5, Math.round((100 - value) / 100 * 4 + 1)));
+                if(value >= 93) {
+                    value = 1;
+                } else if (value >= 80) {
+                    value = 2;
+                } else if (value >= 60) {
+                    value = 3;
+                } else if (value >= 40) {
+                    value = 4;
+                } else {
+                    value = 5;
+                }
                 me.log.info('Stat: Quality, Sensor: %s Value: %s', me.name, me.name, value);
                 me.merakiService1.updateCharacteristic(Characteristic.AirQuality, value);
                 const response2 = await me.meraki.get(me.mtStatsUrl + '?metrics[]=pm25', { data: { serials: [me.serialNumber]} });
@@ -380,7 +390,17 @@ class merakiMTDevice {
         try {
             const response = await me.meraki.get(me.mtStatsUrl + '?metrics[]=indoorAirQuality', { data: { serials: [me.serialNumber]} });
             let value = (response.data[0]['readings'][0]['indoorAirQuality']['score']);
-            value = Math.max(1, Math.min(5, Math.round((100 - value) / 100 * 4 + 1)));
+            if(value >= 93) {
+                value = 1;
+            } else if (value >= 80) {
+                value = 2;
+            } else if (value >= 60) {
+                value = 3;
+            } else if (value >= 40) {
+                value = 4;
+            } else {
+                value = 5;
+            }
             me.log.info('getQuality() - Network: %s, Sensor: %s Value: %s', me.name, me.name, value);
             callback(null, value);
         } catch (error) {
