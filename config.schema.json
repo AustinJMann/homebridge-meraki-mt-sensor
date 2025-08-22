@@ -58,6 +58,10 @@
                   "const": "humiditySensor"
                 },
                 {
+                  "title": "Door",
+                  "const": "doorSensor"
+                },
+                {
                   "title": "Quality/PM2.5/VOC",
                   "const": "qualitySensor"
                 },

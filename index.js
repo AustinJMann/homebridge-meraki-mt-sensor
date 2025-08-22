@@ -178,13 +178,13 @@ class merakiMTDevice {
                 .on('set', this.getHumidity.bind(this));
       }
 
-      // if (this.type == "doorSensor") {
-      //   this.merakiService1 = new Service.ContactSensor(this.name, 'merakiService1');
-      //   this.merakiService1.getCharacteristic(Characteristic.ContactSensorState)
-      //           .on('get', this.getContactState.bind(this))
-      //           .on('set', this.getContactState.bind(this));
-      // }
-      //
+      if (this.type == "doorSensor") {
+        this.merakiService1 = new Service.ContactSensor(this.name, 'merakiService1');
+        this.merakiService1.getCharacteristic(Characteristic.ContactSensorState)
+                .on('get', this.getContactState.bind(this))
+                .on('set', this.getContactState.bind(this));
+      }
+
       // if (this.type == "waterSensor") {
       //   this.merakiService1 = new Service.LeakSensor(this.name, 'merakiService1');
       //   this.merakiService1.getCharacteristic(Characteristic.LeakDetected)
@@ -276,16 +276,16 @@ class merakiMTDevice {
             }
         }
 
-      // if (this.type == "doorSensor") {
-      //   if (me.merakiService1) {
-      //     const response = await me.meraki.get(me.mtStatsUrl + '?metric=door', { data: { serials: [me.serialNumber]} });
-      //     me.log.info('got response %s', response.data[0]);
-      //     let value = (response.data[0].value);
-      //     me.log.info('Network: %s, Sensor: %s Value: %s', me.name, me.name, value);
-      //     me.merakiService1.updateCharacteristic(Characteristic.ContactSensorState, value);
-      //   }
-      // }
-      //
+      if (this.type == "doorSensor") {
+        if (me.merakiService1) {
+            const response = await me.meraki.get(me.mtStatsUrl + '?metrics[]=door', { data: { serials: [me.serialNumber]} });
+            let value = (response.data[0]['readings'][0]['door']['open']);
+          me.log.info('got response %s', value);
+          me.log.info('Network: %s, Sensor: %s Value: %s', me.name, me.name, value);
+          me.merakiService1.updateCharacteristic(Characteristic.ContactSensorState, value);
+        }
+      }
+
       // if (this.type == "waterSensor") {
       //   if (me.merakiService1) {
       //     const response = await me.meraki.get(me.mtStatsUrl + '?metric=water_detection', { data: { serials: [me.serialNumber]} });
@@ -362,18 +362,18 @@ class merakiMTDevice {
     };
   }
 
-  // async getContactState(callback) {
-  //   var me = this;
-  //   try {
-  //     const response = await me.meraki.get(me.mtStatsUrl + '?metric=door', { data: { serials: [me.serialNumber]} });
-  //     let value = (response.data[0].value);
-  //     me.log.info('getContactState() - Network: %s, Sensor: %s Value: %s', me.name, me.name, value);
-  //     callback(null, value);
-  //   } catch (error) {
-  //     me.log.debug('Device: %s, Serial: %s get state error: %s', me.name, me.serial, error);
-  //   };
-  // }
-  //
+  async getContactState(callback) {
+    var me = this;
+    try {
+      const response = await me.meraki.get(me.mtStatsUrl + '?metrics[]=door', { data: { serials: [me.serialNumber]} });
+      let value = (response.data[0]['readings'][0]['door']['open']);
+      me.log.info('getContactState() - Network: %s, Sensor: %s Value: %s', me.name, me.name, value);
+      callback(null, value);
+    } catch (error) {
+      me.log.debug('Device: %s, Serial: %s get state error: %s', me.name, me.serial, error);
+    };
+  }
+
   // async getWaterState(callback) {
   //   var me = this;
   //   try {
